@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Train</title>
+</head>
+<body>
+
+<h1>Détails du train</h1>
+
+<div th:if="${train != null}">
+    <p><strong>Matricule :</strong> <span th:text="${train.matricule}"></span></p>
+</div>
+
+<div th:if="${train == null}">
+    <p>Train introuvable</p>
+</div>
+
+</body>
+</html>
