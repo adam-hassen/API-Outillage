@@ -1,0 +1,187 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "API Ferroviaire",
+    "description": "API REST entre usager-app et gestion-app",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080"
+    }
+  ],
+  "paths": {
+    "/train/consulter": {
+      "get": {
+        "summary": "Consulter un train par matricule",
+        "parameters": [
+          {
+            "name": "matricule",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Train trouvé",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Train"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/trajets/rechercher": {
+      "get": {
+        "summary": "Rechercher un trajet",
+        "parameters": [
+          {
+            "name": "gareDepart",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "gareArrivee",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste des trajets",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Trajet"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reservations": {
+      "post": {
+        "summary": "Créer une réservation",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Reservation"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Réservation créée"
+          }
+        }
+      }
+    },
+    "/reservations/{id}": {
+      "delete": {
+        "summary": "Annuler une réservation",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Réservation annulée"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Train": {
+        "type": "object",
+        "properties": {
+          "matricule": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["TER", "TGV"]
+          },
+          "wagons": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Wagon"
+            }
+          }
+        }
+      },
+      "Wagon": {
+        "type": "object",
+        "properties": {
+          "numero": {
+            "type": "integer"
+          },
+          "nbPlaces": {
+            "type": "integer"
+          }
+        }
+      },
+      "Trajet": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "gareDepart": {
+            "type": "string"
+          },
+          "gareArrivee": {
+            "type": "string"
+          },
+          "dureeMinutes": {
+            "type": "integer"
+          },
+          "trainMatricule": {
+            "type": "string"
+          }
+        }
+      },
+      "Reservation": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "nomUsager": {
+            "type": "string"
+          },
+          "trajetId": {
+            "type": "integer"
+          }
+        }
+      }
+    }
+  }
+}
