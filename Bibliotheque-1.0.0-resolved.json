@@ -1,0 +1,234 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "API Gestion Réseau Ferroviaire",
+    "description": "API basée sur le diagramme de cas d'utilisation",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080/api"
+    }
+  ],
+  "paths": {
+    "/gares": {
+      "post": {
+        "summary": "Créer une gare",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Gare"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Gare créée"
+          }
+        }
+      }
+    },
+    "/gares/{id}": {
+      "put": {
+        "summary": "Modifier une gare",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Gare modifiée"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Supprimer une gare",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Gare supprimée"
+          }
+        }
+      }
+    },
+    "/trains": {
+      "post": {
+        "summary": "Créer un train",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Train"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Train créé"
+          }
+        }
+      }
+    },
+    "/trajets": {
+      "get": {
+        "summary": "Chercher des trajets",
+        "parameters": [
+          {
+            "name": "gareDepart",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "gareArrivee",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste des trajets",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Trajet"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reservations": {
+      "post": {
+        "summary": "Réserver un trajet",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Reservation"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Réservation créée"
+          }
+        }
+      }
+    },
+    "/reservations/{id}": {
+      "delete": {
+        "summary": "Annuler une réservation",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Réservation annulée"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Gare": {
+        "type": "object",
+        "properties": {
+          "idGare": {
+            "type": "integer"
+          },
+          "nom": {
+            "type": "string"
+          },
+          "ville": {
+            "type": "string"
+          },
+          "codePostal": {
+            "type": "string"
+          }
+        }
+      },
+      "Train": {
+        "type": "object",
+        "properties": {
+          "idTrain": {
+            "type": "integer"
+          },
+          "matricule": {
+            "type": "string"
+          },
+          "maxVitesse": {
+            "type": "number"
+          }
+        }
+      },
+      "Trajet": {
+        "type": "object",
+        "properties": {
+          "idTrajet": {
+            "type": "integer"
+          },
+          "gareDepart": {
+            "$ref": "#/components/schemas/Gare"
+          },
+          "gareArrivee": {
+            "$ref": "#/components/schemas/Gare"
+          },
+          "duree": {
+            "type": "integer"
+          }
+        }
+      },
+      "Reservation": {
+        "type": "object",
+        "properties": {
+          "idReservation": {
+            "type": "integer"
+          },
+          "trajet": {
+            "$ref": "#/components/schemas/Trajet"
+          }
+        }
+      }
+    }
+  }
+}
